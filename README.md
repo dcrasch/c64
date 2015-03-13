@@ -5,7 +5,7 @@ C64 Development on Android - Assembly Language
 Copyright (C) 2015 David Rasch <david@hacklab.nl>
 
 ## LICENSE
-GNU GPL 
+GNU GENERAL PUBLIC LICENSE v3
 
 ## INSTALLATION
 
