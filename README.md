@@ -1,10 +1,13 @@
 # c64
 C64 Development on Android - Assembly Language
 
-CREDITS
+## CREDITS
 Copyright (C) 2015 David Rasch <david@hacklab.nl>
 
-INSTALLATION
+## LICENSE
+GNU GPL 
+
+## INSTALLATION
 
 1. Install the dasm assembler
 2. Install Android NDK
@@ -12,3 +15,4 @@ INSTALLATION
 4. Install editor
 5. Connect Raspberry pi
 6. Start hacking!
+
