@@ -15,12 +15,12 @@ COLOR_WHITE     .equ $01
 	rts
 	
 RETX	.byte $00
-POS	.byte $00, $00
+POS	 .byte $00
 
 init
 	;;  maze
 	jsr $e544	;clear the screen
-	;; 	jsr initScreen
+	;;jsr initScreen
 	jsr depthFirstSearch
 	rts
 
@@ -73,7 +73,7 @@ depthFirstSearch
 	jsr moveLeft
 	lda #$01
 	ldx POS
-	sta SCREEN_COLOR,x
+	sta SCREEN_MEM,x
 	rts
 	
 get_random_number ; reg a ()
