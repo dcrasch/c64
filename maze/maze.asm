@@ -5,31 +5,28 @@
 	.org $0801
 	.hex 0c08 0000 9e32 3036 3100 0000 ; basic start header
 
-SCREEN_MEM 	.equ $0400
+SCREEN_MEM  .equ $0400
 SCREEN_COLOR	.equ $D800
 
-COLOR_BLACK	.equ $00
-COLOR_WHITE     .equ $01
+COLOR_BLACK .equ $00
+COLOR_WHITE .equ $01
+CHAR_CORNER .equ $4F
+CHAR_TOP    .equ $77
+CHAR_SIDE   .equ $74
 
 	jmp init
 	rts
 	
-RETX	.byte $00
-POS	 .byte $00
-
 init
 	;;  maze
-	jsr $e544	;clear the screen
-	;;jsr initScreen
-	jsr depthFirstSearch
+	jsr initScreen
+	;;jsr depthFirstSearch
 	rts
 
 initScreen
-	;; $4F, $77 $74 |-, --, |
 	ldx #$00
-
 initScreenLoop
-	lda #$4F
+	lda #CHAR_CORNER
 	sta SCREEN_MEM,x
 	sta SCREEN_MEM+$0100,x
 	sta SCREEN_MEM+$0200,x
@@ -43,39 +40,6 @@ initScreenLoop
 	bne initScreenLoop
 	rts	
 
-;; @TODO CHECK FOR OVERFLOWS
-moveDown
-	clc
-	lda #$28
-	adc POS
-	rts
-moveUp
-	clc
-	lda #$28
-	sbc POS
-	sta POS
-	rts
-moveLeft
-	clc
-	lda #$01
-	adc POS
-	sta POS
-	rts
-moveRight
-	clc
-	lda #$01
-	sbc POS
-	sta POS
-	rts
-	
-depthFirstSearch
-	jsr moveLeft
-	jsr moveLeft
-	lda #$01
-	ldx POS
-	sta SCREEN_MEM,x
-	rts
-	
 get_random_number ; reg a ()
     lda $d012 ; load current screen raster value
     eor $dc04 ; xor against value in $dc04
