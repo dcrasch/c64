@@ -7,6 +7,7 @@
 
 SCREEN_MEM  .equ $0400
 SCREEN_COLOR	.equ $D800
+SCREEN_WIDTH .equ $28
 
 COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
@@ -14,13 +15,17 @@ CHAR_CORNER .equ $4F
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
-	jmp init
-	rts
+ROW .byte $08
+COL .byte $0A
+POS .word $0000
+
+ jmp initScreen
+ ;;jmp drawChar
+ rts
 	
 init
 	;;  maze
 	jsr initScreen
-	;;jsr depthFirstSearch
 	rts
 
 initScreen
@@ -39,6 +44,35 @@ initScreenLoop
 	inx
 	bne initScreenLoop
 	rts	
+
+drawChar ; at row and col
+;; (4xROW + ROW) x 8 = 40 x ROW
+ CLC
+ LDY #$00
+; multiply 5
+ LDA ROW
+ ASL
+ ASL
+ ADC ROW
+; multiply 8
+ CLC
+ ASL
+ ROL >POS
+ ASL
+ ROL >POS
+; add column
+ CLC
+ ADC COL
+ BCC rr
+ INC >POS
+rr
+ STA <POS
+ LDA >POS
+ ADC $04
+ STA >POS
+ LDA #$77
+ STA POS
+ RTS
 
 get_random_number ; reg a ()
     lda $d012 ; load current screen raster value
