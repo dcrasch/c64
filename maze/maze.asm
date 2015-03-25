@@ -3,7 +3,8 @@
 	
 	.processor 6502 
 	.org $0801
-	.hex 0c08 0000 9e32 3036 3100 0000 ; basic start header
+; basic start header
+	.hex 0c08 0000 9e32 3036 3100 0000 
 
 SCREEN_MEM    .equ $0400
 SCREEN_COLOR  .equ $D800
@@ -52,7 +53,7 @@ looprow:
 initScreen
 	ldx #$00
 initScreenLoop
-	lda #CHAR_CORNER
+	lda #$e6
 	sta SCREEN_MEM,x
 	sta SCREEN_MEM+$0100,x
 	sta SCREEN_MEM+$0200,x
@@ -93,8 +94,8 @@ rr
  ADC #>SCREEN_MEM 
  STA POS+1
 
- lda #$21
- ldy #$0	
+ lda #$a0
+ ldy #$00
  sta (POS),y
  RTS
 
