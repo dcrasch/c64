@@ -17,8 +17,8 @@ CHAR_SIDE   .equ $74
 
 POS         .equ $BA
 
-ROW .equ #$02
-COL .equ #$00
+ROW .equ #24
+COL .equ #20
 
  jsr init
  rts
@@ -59,6 +59,7 @@ drawChar ; at row and col
  ADC #ROW
 ; multiply 8
  CLC
+ ASL
  ASL
  ROL POS+1
  ASL
