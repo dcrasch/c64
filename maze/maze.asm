@@ -15,18 +15,35 @@ CHAR_CORNER .equ $70
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
-POS         .equ $BA 		;zeropage
-
-ROW .equ #10
-COL .equ #15
+POS .equ $BA 		;zeropage
+ROW .equ $BD
+COL .equ $BE
 
  jsr init
  rts
 	
 init
- jsr initScreen
- jsr drawChar
- rts
+	jsr initScreen
+	jsr fillScreen
+	rts
+fillScreen	
+ lda #$0
+ sta COL		
+loopcol:	
+	lda #0
+	sta ROW
+looprow:
+	jsr drawChar
+	INC ROW
+	LDA ROW
+	CMP #25
+	bne looprow
+
+	INC COL
+	LDA COL
+	CMP #40
+	bne loopcol
+	rts
 
 initScreen
 	ldx #$00
@@ -46,33 +63,33 @@ initScreenLoop
 	rts	
 
 drawChar ; at row and col
-;; (4xROW + ROW) x 8 = 40 x ROW
+	;; (4xROW + ROW) x 8 = 40 x ROW
  LDA #$00
  STA POS+1
 ; multiply 5
- LDA #ROW
+ LDA ROW
  ASL
  ASL
- ADC #ROW
+ ADC ROW
 ; multiply 8
  ASL
- ASL
+ ASL	
  ROL POS+1
  ASL
  ROL POS+1
-; add column
- ADC #COL
+	;;  add column
+ ADC COL
  BCC rr
  INC POS+1
 rr
  STA POS
-
  LDA POS+1
+ CLC
  ADC #$04 ; add video base
  STA POS+1
 
- ldy #$00
  lda #$21
+ ldy #$0	
  sta (POS),y
  RTS
 
