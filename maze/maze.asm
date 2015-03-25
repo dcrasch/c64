@@ -11,22 +11,23 @@ SCREEN_WIDTH .equ $28
 
 COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
-CHAR_CORNER .equ $4F
+CHAR_CORNER .equ $70
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
-ROW .byte $08
-COL .byte $0A
-POS .word $0000
+POS         .equ $BA
 
- jmp initScreen
- ;;jmp drawChar
+ROW .equ #$02
+COL .equ #$00
+
+ jsr init
  rts
 	
 init
 	;;  maze
-	jsr initScreen
-	rts
+ jsr initScreen
+ jsr drawChar
+ rts
 
 initScreen
 	ldx #$00
@@ -47,31 +48,36 @@ initScreenLoop
 
 drawChar ; at row and col
 ;; (4xROW + ROW) x 8 = 40 x ROW
+ lda #$00
+ sta POS+1
+
  CLC
- LDY #$00
 ; multiply 5
- LDA ROW
+ LDA #ROW
  ASL
  ASL
- ADC ROW
+ ADC #ROW
 ; multiply 8
  CLC
  ASL
- ROL >POS
+ ROL POS+1
  ASL
- ROL >POS
+ ROL POS+1
 ; add column
  CLC
- ADC COL
+ ADC #COL
  BCC rr
- INC >POS
+ INC POS+1
 rr
- STA <POS
- LDA >POS
- ADC $04
- STA >POS
- LDA #$77
  STA POS
+
+ LDA POS+1
+ ADC #$04 ; add video base
+ STA POS+1
+
+ ldy #$00
+ lda #$21
+ sta (POS),y
  RTS
 
 get_random_number ; reg a ()
