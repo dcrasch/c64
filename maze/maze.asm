@@ -5,8 +5,8 @@
 	.org $0801
 	.hex 0c08 0000 9e32 3036 3100 0000 ; basic start header
 
-SCREEN_MEM  .equ $0400
-SCREEN_COLOR	.equ $D800
+SCREEN_MEM   .equ $0400
+SCREEN_COLOR .equ $D800
 SCREEN_WIDTH .equ $28
 
 COLOR_BLACK .equ $00
@@ -15,16 +15,15 @@ CHAR_CORNER .equ $70
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
-POS         .equ $BA
+POS         .equ $BA 		;zeropage
 
-ROW .equ #24
-COL .equ #20
+ROW .equ #10
+COL .equ #15
 
  jsr init
  rts
 	
 init
-	;;  maze
  jsr initScreen
  jsr drawChar
  rts
@@ -48,24 +47,20 @@ initScreenLoop
 
 drawChar ; at row and col
 ;; (4xROW + ROW) x 8 = 40 x ROW
- lda #$00
- sta POS+1
-
- CLC
+ LDA #$00
+ STA POS+1
 ; multiply 5
  LDA #ROW
  ASL
  ASL
  ADC #ROW
 ; multiply 8
- CLC
  ASL
  ASL
  ROL POS+1
  ASL
  ROL POS+1
 ; add column
- CLC
  ADC #COL
  BCC rr
  INC POS+1
