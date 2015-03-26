@@ -13,7 +13,7 @@ SCREEN_HEIGHT .equ 25
 
 COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
-CHAR_CORNER .equ $20
+CHAR_CORNER .equ $ec
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
@@ -71,7 +71,7 @@ loopcol2:
 initScreen
 	ldx #$00
 initScreenLoop
-	lda #$e6
+	lda #CHAR_CORNER
 	sta SCREEN_MEM,x
 	sta SCREEN_MEM+$0100,x
 	sta SCREEN_MEM+$0200,x
@@ -100,7 +100,7 @@ SCAN:
 		BEQ LEFT
 		CMP #68		;D - right
 		BEQ RIGHT
- CMP #13 ; Enter - quit
+ CMP #13 ;Enter - quit
  beq END
  jsr drawChar
  JMP SCAN
@@ -146,7 +146,7 @@ rr
  ADC #>SCREEN_MEM 
  STA POS+1
 
- lda #$57
+ lda #$51
  ldy #$00
  sta (POS),y
  RTS
