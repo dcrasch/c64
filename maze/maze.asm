@@ -20,7 +20,6 @@ CHAR_SIDE   .equ $74
 ; keyboard
 GETIN  .equ $FFE4
 SCNKEY .equ $FF9F
-ENTER  .equ $C202
 
 ; zeropage vectors
 POS .equ $BA
@@ -101,6 +100,8 @@ SCAN:
 		BEQ LEFT
 		CMP #68		;D - right
 		BEQ RIGHT
+ CMP #13 ; Enter - quit
+ beq END
  jsr drawChar
  JMP SCAN
 DOWN:
