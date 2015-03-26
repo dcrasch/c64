@@ -26,81 +26,81 @@ POS .equ $BA
 ROW .equ $BD
 COL .equ $BE
 
- jsr init
- rts
+ JSR init
+ RTS
 	
 init
- jsr initScreen
- jsr moveAround	
- rts
+ JSR initScreen
+ JSR moveAround	
+ RTS
 
 fillScreen	
- lda #0
- sta COL
+ LDA #0
+ STA COL
 loopcol:	
- lda COL
- lsr
- sta ROW
+ LDA COL
+ LSR
+ STA ROW
  INC ROW
 looprow:
-	jsr drawChar
-	INC ROW
-	LDA ROW
-	CMP #SCREEN_HEIGHT
-	bne looprow
-	INC COL
-	LDA COL
-	CMP #SCREEN_WIDTH
-	bne loopcol
-	rts
+ jsr drawChar
+ INC ROW
+ LDA ROW
+ CMP #SCREEN_HEIGHT
+ bne looprow
+ INC COL
+ LDA COL
+ CMP #SCREEN_WIDTH
+ bne loopcol
+ rts
 		
 sineScreen	
  lda #$0
  sta COL		
 loopcol2:
-	ldx COL
-	lda sine,x
-	sta ROW
-	jsr drawChar
-	INC COL
-	LDA COL
-	CMP #40
-	bne loopcol2
-	rts
+ ldx COL
+ lda sine,x
+ sta ROW
+ jsr drawChar
+ INC COL
+ LDA COL
+ CMP #40
+ bne loopcol2
+ rts
 		
 initScreen
-	ldx #$00
+ ldx #$00
 initScreenLoop
-	lda #CHAR_CORNER
-	sta SCREEN_MEM,x
-	sta SCREEN_MEM+$0100,x
-	sta SCREEN_MEM+$0200,x
-	sta SCREEN_MEM+$0300,x
-	lda #COLOR_WHITE
-	sta SCREEN_COLOR,x
-	sta SCREEN_COLOR+$0100,x
-	sta SCREEN_COLOR+$0200,x
-	sta SCREEN_COLOR+$0300,x
-	inx
-	bne initScreenLoop
-	rts	
+ lda #CHAR_CORNER
+ sta SCREEN_MEM,x
+ sta SCREEN_MEM+$0100,x
+ sta SCREEN_MEM+$0200,x
+ sta SCREEN_MEM+$0300,x
+ lda #COLOR_WHITE
+ sta SCREEN_COLOR,x
+ sta SCREEN_COLOR+$0100,x
+ sta SCREEN_COLOR+$0200,x
+ sta SCREEN_COLOR+$0300,x
+ inx
+ bne initScreenLoop
+ rts	
 
 moveAround
  lda #0
  sta ROW
  sta COL
 SCAN:
- JSR SCNKEY	;get key
- JSR GETIN	;put key in A
- CMP #87 ;W - UP
+ JSR SCNKEY ;get key
+ JSR GETIN  ;put key in A
+ CMP #87    ;W - UP
  BEQ UP
- CMP #83		;S - down
-		BEQ DOWN
- CMP #65		;A - left
-		BEQ LEFT
-		CMP #68		;D - right
-		BEQ RIGHT
- CMP #13 ;Enter - quit
+ CMP #83    ;S - down
+ BEQ DOWN
+ CMP #65    ;A - left
+ BEQ LEFT
+ CMP #68    ;D - right
+ BEQ RIGHT
+ CMP #13    ;Enter - quit
  beq END
  jsr drawChar
  JMP SCAN
@@ -119,11 +119,11 @@ RIGHT:
 END:
  RTS
 
-drawChar ; at row and col
-	;; (4xROW + ROW) x 8 = 40 x ROW
+drawChar
+ ;; (4xROW + ROW) x 8 = 40 x ROW
  LDA #$00
  STA POS+1
-; multiply 5
+ ; multiply 5
  LDA ROW
  ASL
  ASL
@@ -134,7 +134,7 @@ drawChar ; at row and col
  ROL POS+1
  ASL
  ROL POS+1
-	; add column
+ ; add column
  ADC COL
  BCC rr
  INC POS+1
