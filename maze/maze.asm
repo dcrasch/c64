@@ -11,7 +11,7 @@ SCREEN_WIDTH .equ $28
 
 COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
-CHAR_CORNER .equ $70
+CHAR_CORNER .equ $20
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
@@ -24,8 +24,9 @@ COL .equ $BE
 	
 init
 	jsr initScreen
-	jsr fillScreen
+	jsr sineScreen	
 	rts
+	
 fillScreen	
  lda #$0
  sta COL		
@@ -44,7 +45,21 @@ looprow:
 	CMP #40
 	bne loopcol
 	rts
-
+		
+sineScreen	
+ lda #$0
+ sta COL		
+loopcol2:
+	ldx COL
+	lda sine,x
+	sta ROW
+	jsr drawChar
+	INC COL
+	LDA COL
+	CMP #40
+	bne loopcol2
+	rts
+		
 initScreen
 	ldx #$00
 initScreenLoop
@@ -98,3 +113,5 @@ get_random_number ; reg a ()
     eor $dc04 ; xor against value in $dc04
     sbc $dc05 ; then subtract value in $dc05
     rts
+	
+sine hex 18 17 15 12 0e 0a 07 03 01 00 00 01 04 07 0b 0f 12 15 17 17 17 15 11 0e 0a 06 03 01 00 00 01 04 08 0c 0f 13 16 17 17 16
