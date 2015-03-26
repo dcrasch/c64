@@ -17,6 +17,11 @@ CHAR_CORNER .equ $20
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
 
+; keyboard
+GETIN  .equ $FFE4
+SCNKEY .equ $FF9F
+ENTER  .equ $C202
+
 ; zeropage vectors
 POS .equ $BA
 ROW .equ $BD
@@ -26,17 +31,13 @@ COL .equ $BE
  rts
 	
 init
-	jsr initScreen
-	jsr sineScreen	
-	rts
-<<<<<<< HEAD
-	
-=======
+ jsr initScreen
+ jsr moveAround	
+ rts
 
->>>>>>> b60a0e05cebee9b904fd3ff186340ad6e9bdc88d
 fillScreen	
  lda #0
- sta COL		
+ sta COL
 loopcol:	
  lda COL
  lsr
@@ -85,6 +86,38 @@ initScreenLoop
 	bne initScreenLoop
 	rts	
 
+moveAround
+ lda #0
+ sta ROW
+ sta COL
+SCAN:
+ JSR SCNKEY	;get key
+ JSR GETIN	;put key in A
+ CMP #87 ;W - UP
+ BEQ UP
+ CMP #83		;S - down
+		BEQ DOWN
+ CMP #65		;A - left
+		BEQ LEFT
+		CMP #68		;D - right
+		BEQ RIGHT
+ jsr drawChar
+ JMP SCAN
+DOWN:
+ INC ROW
+ JMP SCAN
+UP:
+ DEC ROW
+ JMP SCAN
+LEFT:
+ DEC COL
+ JMP SCAN
+RIGHT:
+ INC COL
+ JMP SCAN
+END:
+ RTS
+
 drawChar ; at row and col
 	;; (4xROW + ROW) x 8 = 40 x ROW
  LDA #$00
@@ -112,7 +145,7 @@ rr
  ADC #>SCREEN_MEM 
  STA POS+1
 
- lda #$a0
+ lda #$57
  ldy #$00
  sta (POS),y
  RTS
@@ -121,10 +154,6 @@ get_random_number ; reg a ()
     lda $d012 ; load current screen raster value
     eor $dc04 ; xor against value in $dc04
     sbc $dc05 ; then subtract value in $dc05
-<<<<<<< HEAD
     rts
 	
 sine hex 18 17 15 12 0e 0a 07 03 01 00 00 01 04 07 0b 0f 12 15 17 17 17 15 11 0e 0a 06 03 01 00 00 01 04 08 0c 0f 13 16 17 17 16
-=======
-    rts
->>>>>>> b60a0e05cebee9b904fd3ff186340ad6e9bdc88d
