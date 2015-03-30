@@ -13,9 +13,10 @@ SCREEN_HEIGHT .equ 25
 
 COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
-CHAR_CORNER .equ $ec
+CHAR_CORNER .equ $56
 CHAR_TOP    .equ $77
 CHAR_SIDE   .equ $74
+CHAR_SPACE  .equ $20
 
 ; keyboard
 GETIN  .equ $FFE4
@@ -25,6 +26,7 @@ SCNKEY .equ $FF9F
 POS .equ $BA
 ROW .equ $BD
 COL .equ $BE
+CHAR_DRAW .equ $BF
 
  JSR init
  RTS
@@ -71,7 +73,7 @@ loopcol2:
 initScreen
  ldx #$00
 initScreenLoop
- lda #CHAR_CORNER
+ lda #CHAR_SPACE
  sta SCREEN_MEM,x
  sta SCREEN_MEM+$0100,x
  sta SCREEN_MEM+$0200,x
@@ -102,16 +104,28 @@ SCAN:
  BEQ RIGHT
  CMP #13    ;Enter - quit
  beq END
- jsr drawChar
  JMP SCAN
 DOWN:
  INC ROW
+ LDA #$42
+ sta CHAR_DRAW
  JMP SCAN
 UP:
  DEC ROW
  JMP SCAN
-LEFT:
+LEFT
+ ldy #$00
+ lda (POS),y
+ CMP #$42
+ BNE dl
+ LDA #$6d
+ STA CHAR_DRAW
+ jsr drawChar
+dl
  DEC COL
+ lda #$60
+ sta CHAR_DRAW
+ jsr drawChar
  JMP SCAN
 RIGHT:
  INC COL
@@ -146,7 +160,7 @@ rr
  ADC #>SCREEN_MEM 
  STA POS+1
 
- lda #$51
+ lda CHAR_DRAW
  ldy #$00
  sta (POS),y
  RTS
