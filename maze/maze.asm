@@ -23,10 +23,10 @@ GETIN  .equ $FFE4
 SCNKEY .equ $FF9F
 
 ; zeropage vectors
-POS .equ $BA
-ROW .equ $BD
-COL .equ $BE
-CHAR_DRAW .equ $BF
+POS .equ $22
+ROW .equ $24
+COL .equ $25
+CHAR_DRAW .equ $26
 
  JSR init
  RTS
@@ -88,10 +88,13 @@ initScreenLoop
  rts	
 
 moveAround
+ lda CHAR_TOP
+ STA CHAR_DRAW
  lda #0
  sta ROW
  sta COL
 SCAN:
+ jsr drawChar
  JSR SCNKEY ;get key
  JSR GETIN  ;put key in A
  CMP #87    ;W - UP
@@ -107,25 +110,12 @@ SCAN:
  JMP SCAN
 DOWN:
  INC ROW
- LDA #$42
- sta CHAR_DRAW
  JMP SCAN
 UP:
  DEC ROW
  JMP SCAN
 LEFT
- ldy #$00
- lda (POS),y
- CMP #$42
- BNE dl
- LDA #$6d
- STA CHAR_DRAW
- jsr drawChar
-dl
  DEC COL
- lda #$60
- sta CHAR_DRAW
- jsr drawChar
  JMP SCAN
 RIGHT:
  INC COL
