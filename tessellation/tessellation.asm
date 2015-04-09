@@ -17,6 +17,8 @@ CHAR_SPACE  .equ $20
  jsr HiresClearScreen
  rts
 
+; enable multi color bitmap
+; see page 127 c64 prog ref
 HiresOn: 
  LDA $D018
  ORA #$08
@@ -24,7 +26,7 @@ HiresOn:
  LDA $D011
  ORA #$20
  STA $D011
- RTS
+ RTS
 
 HiresClearScreen
  LDX #$00
@@ -35,7 +37,7 @@ loop:
  dex
  bne loop
  iny
- inc *-5
+ inc *-5 ; modify sta $2000 abs address instruction
  cpy #$20
  bne loop
  rts
