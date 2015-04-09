@@ -18,14 +18,13 @@ CHAR_SPACE  .equ $20
  ;jsr HiresOff
  rts
 
-; enable multi color bitmap
-; see page 127 c64 prog ref
+; enable standard hires bitmapmode
 HiresOn: 
  LDA $D018
- ORA #$08 ; enable videobase $2000 mask
+ ORA #$08 ; enable videobase $2000 mask p104
  STA $D018
  LDA $D011
- ORA #$20 ; enable bitmapmode mask
+ ORA #$20 ; enable bitmapmode mask p122
  STA $D011
  RTS
 
