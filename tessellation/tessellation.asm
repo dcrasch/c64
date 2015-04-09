@@ -15,16 +15,17 @@ CHAR_SPACE  .equ $20
  jsr TextClearScreen
  jsr HiresOn
  jsr HiresClearScreen
+ ;jsr HiresOff
  rts
 
 ; enable multi color bitmap
 ; see page 127 c64 prog ref
 HiresOn: 
  LDA $D018
- ORA #$08
+ ORA #$08 ; enable videobase $2000 mask
  STA $D018
  LDA $D011
- ORA #$20
+ ORA #$20 ; enable bitmapmode mask
  STA $D011
  RTS
 
