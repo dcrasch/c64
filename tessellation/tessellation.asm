@@ -12,9 +12,15 @@ COLOR_BLACK .equ $00
 COLOR_WHITE .equ $01
 CHAR_SPACE  .equ $20
 
+ZEROPTR .equ $FD
+POS .equ $22
+BITMASK  .equ %00000111
+BITMASKI .equ %11111000
+
  jsr TextClearScreen
  jsr HiresOn
  jsr HiresClearScreen
+ jsr PutPixel
  ;jsr HiresOff
  rts
 
@@ -31,7 +37,7 @@ HiresOn:
 HiresClearScreen
  LDX #$00
  ldy #$00
- lda #$ff
+ lda #$00
 loop:
  sta $2000,x
  dex
@@ -58,3 +64,32 @@ loop2:
  inx
  bne loop2
  rts	
+
+PutPixel
+ lda #$00
+ sta POS
+ lda #$20
+ sta POS+1
+
+ ldy #$00
+ ldx #$00
+
+loop3:
+ txa 
+ and #BITMASK
+ tax
+ lda (POS),y
+ ora BITTAB,x
+ sta (POS),y
+ inx
+ txa
+ and #BITMASK
+ bne loop3
+
+ inc POS
+ lda POS
+ cmp #40
+ bne loop3
+ rts
+
+BITTAB .hex 80 40 20 10 08 04 02 01
