@@ -3,3 +3,4 @@
 10 poke53265,peek(53265)or32
 20 fori=basetobase+7999:poke i,0:next
 30 fori=1024to2023:pokei,3: next
+40 print 2{up}3
