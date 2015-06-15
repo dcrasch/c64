@@ -13,6 +13,6 @@ GNU GENERAL PUBLIC LICENSE
 2. Install Android NDK
 3. Install C64 Emulator
 4. Install editor
-5. Connect Raspberry pi
+5. Connect Raspberry pi or tapduino
 6. Start hacking!
 
